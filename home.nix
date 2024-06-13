@@ -30,7 +30,7 @@
     # # overrides. You can do that directly here, just don't forget the
     # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
     # # fonts?
-    # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
+    (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono"  "Mononoki" "Hack" "ZedMono" ]; })
 
     # # You can also create simple shell scripts directly inside your
     # # configuration. For example, this adds a command 'my-hello' to your
@@ -94,6 +94,120 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  programs.alacritty = {
+    enable = true;
+    settings = {
+      window = {
+        opacity = 0.9;
+        padding = {
+          x = 10;
+          y = 10;
+        };
+      };
+      font = {
+        normal = {
+          family = "Hack Nerd Font Mono";
+        };
+      };
+      colors = {
+        primary = {
+          background = "#1E1E2E";
+          foreground = "#CDD6F4";
+          dim_foreground = "#CDD6F4";
+          bright_foreground = "#CDD6F4";
+        };
+        cursor = {
+          text = "#1E1E2E";
+          cursor = "#F5E0DC";
+        };
+        vi_mode_cursor = {
+          text = "#1E1E2E";
+          cursor = "#B4BEFE";
+        };
+        search = {
+          matches = {
+            foreground = "#1E1E2E";
+            background = "#A6ADC8";
+          };
+          focused_match = {
+            foreground = "#1E1E2E";
+            background = "#A6E3A1";
+          };
+        };
+        hints = {
+          start = {
+            foreground = "#1E1E2E";
+            background = "#F9E2AF";
+          };
+          end = {
+            foreground = "#1E1E2E";
+            background = "#A6ADC8";
+          };
+        };
+        selection = {
+          text = "#1E1E2E";
+          background = "#F5E0DC";
+        };
+        normal = {
+          black = "#45475A";
+          red = "#F38BA8";
+          green = "#A6E3A1";
+          yellow = "#F9E2AF";
+          blue = "#89B4FA";
+          magenta = "#F5C2E7";
+          cyan = "#94E2D5";
+          white = "#BAC2DE";
+        };
+        bright = {
+          black = "#585B70";
+          red = "#F38BA8";
+          green = "#A6E3A1";
+          yellow = "#F9E2AF";
+          blue = "#89B4FA";
+          magenta = "#F5C2E7";
+          cyan = "#94E2D5";
+          white = "#A6ADC8";
+        };
+        dim = {
+          black = "#45475A";
+          red = "#F38BA8";
+          green = "#A6E3A1";
+          yellow = "#F9E2AF";
+          blue = "#89B4FA";
+          magenta = "#F5C2E7";
+          cyan = "#94E2D5";
+          white = "#BAC2DE";
+        };
+        indexed_colors = [
+          {
+            index = 16;
+            color = "#FAB387";
+          }
+          {
+            index = 17;
+            color = "#F5E0DC";
+          }
+        ];
+      };
+    };
+  };
+
+  programs.tmux = {
+    enable = true;
+    prefix = "C-Space";
+    baseIndex = 1;
+    terminal = "xterm-256color";
+    keyMode = "vi";
+    plugins = with pkgs; [
+      tmuxPlugins.vim-tmux-navigator
+      tmuxPlugins.catppuccin
+    ];
+    extraConfig = ''
+      set-option -sa terminal-overrides ",xterm*:Tc"
+      set -g @catppuccin_flavour 'macchiato'
+    '';
+  };
 
   programs.neovim = {
     enable = true;

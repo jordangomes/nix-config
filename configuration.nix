@@ -59,9 +59,9 @@
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
     shell = pkgs.zsh;
     packages = with pkgs; [
-      discord
       feh
       firefox
+      gcc
       grimblast
       gnome.nautilus
       gnome.gnome-disk-utility
@@ -69,11 +69,16 @@
       neofetch
       obs-studio
       pavucontrol
+      piper
+      remmina
       rustup
       spotify
       signal-desktop
       tree
+      ueberzugpp
       vscode
+      wl-clipboard
+      wofi-emoji
     ];
   };
 
@@ -87,7 +92,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    alacritty
+    ansible
     btop
     gptfdisk
     gh
@@ -101,8 +106,13 @@
     hyprlock
     killall
     powershell
+    protonup
+    qemu
+    quickemu
     rofi-wayland
+    sshpass
     unzip
+    vesktop
     yazi
   ];
 
@@ -112,15 +122,22 @@
     noto-fonts-emoji
     liberation_ttf
     google-fonts
+    hack-font
     fira-code
     fira-code-symbols
     font-awesome
   ];
 
   xdg.portal.enable = true;
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  xdg.portal.extraPortals = [ 
+#    pkgs.xdg-desktop-portal-gtk
+#    pkgs.xdg-desktop-portal-wlr
+    pkgs.xdg-desktop-portal-hyprland
+ ];
+ xdg.portal.gtkUsePortal = true;
 
   programs.steam.enable = true;
+  programs.steam.gamescopeSession.enable = true;
 
   programs.zsh = {
     enable = true;
@@ -139,6 +156,8 @@
     WLR_NO_HARDWARE_CURSORS = "1";
 
     NIXOS_OZONE_WL = "1";
+
+    STEAM_EXTRA_COMPAT_TOOLS_PATHS = "/home/user/.steam/root/compatibilitytools.d";
   };
 
   hardware = {
@@ -148,6 +167,8 @@
   };
 
   # List services that you want to enable:
+  
+  services.ratbagd.enable = true;
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
