@@ -18,10 +18,13 @@
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
+    brave
+    caprine-bin
     dconf
     playerctl
     ripgrep
     zig
+    zed-editor
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
@@ -198,7 +201,6 @@
     prefix = "C-Space";
     baseIndex = 1;
     terminal = "xterm-256color";
-    keyMode = "vi";
     plugins = with pkgs; [
       tmuxPlugins.vim-tmux-navigator
       tmuxPlugins.catppuccin

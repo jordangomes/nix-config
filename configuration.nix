@@ -15,6 +15,16 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.supportedFilesystems = [ "ntfs" ];
+  boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
+
+  boot.kernel = {
+    sysctl = {
+      "net.ipv4.conf.all.forwarding" = true;
+    };
+  };
+  boot.kernelModules = [
+    "v4l2loopback"
+  ];
 
   networking.hostName = "jordans-desktop"; # Define your hostname.
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
@@ -41,6 +51,11 @@
     wayland = true;
   };
 
+  services.zerotierone.enable = true;
+  services.zerotierone.joinNetworks = [
+    "60ee7c034a77331b"
+  ];
+
   # enable GVFS for trash
   services.gvfs.enable = true;
 
@@ -56,27 +71,37 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.jordan = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ 
+      "wheel" 
+      "wireshark"
+    ]; # Enable ‘sudo’ for the user.
+
     shell = pkgs.zsh;
     packages = with pkgs; [
+      atlauncher
       feh
       firefox
       gcc
+      gimp
       grimblast
       gnome.nautilus
       gnome.gnome-disk-utility
+      jdk8
       mpv
       neofetch
+      nmap
       obs-studio
       pavucontrol
       piper
       remmina
       rustup
+      nodejs_22
       spotify
       signal-desktop
       tree
       ueberzugpp
       vscode
+      wireshark
       wl-clipboard
       wofi-emoji
     ];
@@ -105,6 +130,7 @@
     hyprpaper
     hyprlock
     killall
+    openssl
     powershell
     protonup
     qemu
@@ -114,6 +140,7 @@
     unzip
     vesktop
     yazi
+    zerotierone
   ];
 
   fonts.packages = with pkgs; [
@@ -131,14 +158,14 @@
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [ 
 #    pkgs.xdg-desktop-portal-gtk
-#    pkgs.xdg-desktop-portal-wlr
+    pkgs.xdg-desktop-portal-wlr
     pkgs.xdg-desktop-portal-hyprland
- ];
- xdg.portal.gtkUsePortal = true;
+  ];
 
+  programs.wireshark.enable = true;
   programs.steam.enable = true;
   programs.steam.gamescopeSession.enable = true;
-
+  programs.noisetorch.enable = true;
   programs.zsh = {
     enable = true;
     autosuggestions.enable = true;
@@ -155,13 +182,13 @@
   environment.sessionVariables = {
     WLR_NO_HARDWARE_CURSORS = "1";
 
-    NIXOS_OZONE_WL = "1";
+    ELECTRON_OZONE_PLATFORM_HINT = "x11";
 
     STEAM_EXTRA_COMPAT_TOOLS_PATHS = "/home/user/.steam/root/compatibilitytools.d";
   };
 
   hardware = {
-    opengl.enable = true;
+    graphics.enable = true;
     nvidia.modesetting.enable = true;
     nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
@@ -174,8 +201,12 @@
   # services.openssh.enable = true;
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [ 80 ];
+  networking.firewall.allowedUDPPorts = [ 
+    67
+    68
+    69 
+  ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
